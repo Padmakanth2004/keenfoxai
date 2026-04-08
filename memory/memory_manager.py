@@ -7,17 +7,23 @@ MEMORY_FILE = "memory/data.json"
 def load_memory():
     if not os.path.exists(MEMORY_FILE):
         return {}
+
     try:
         with open(MEMORY_FILE, "r") as f:
-            return json.load(f)
-    except:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except Exception as e:
+        print(f"Error loading memory: {e}")
         return {}
 
 
 def save_memory(data):
-    os.makedirs("memory", exist_ok=True)
-    with open(MEMORY_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+    try:
+        os.makedirs("memory", exist_ok=True)
+        with open(MEMORY_FILE, "w") as f:
+            json.dump(data, f, indent=4)
+    except Exception as e:
+        print(f"Error saving memory: {e}")
 
 
 def compute_diff(old, new):
